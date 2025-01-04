@@ -2,7 +2,7 @@ pipeline {
     agent any
 
 
-    stage {
+    stages {
         stage('Node Version'){
             steps{
                 sh '''
