@@ -1,8 +1,8 @@
 pipeline {
     agent any
 
-    tools {
-        nodejs 'nodejs-22-6-0' // Ensure this tool is configured in Jenkins
+    tools {                         // Tools Section used to used specific Version from any tool Installed at Jenkins 
+        nodejs 'nodejs-22-6-0' 
     }
 
     stages {
@@ -12,7 +12,7 @@ pipeline {
             }
         }
         stage('Dependency Scaning') {
-            parallel {
+            parallel {                  // It used to excute stages at same time Not depends on each other. 
                 stage('NPM Dependency Audit') {
                     steps {
                         sh '''
@@ -29,7 +29,8 @@ pipeline {
                             --out ./
                             --format ALL
                             --prettyPrint
-                        ''', odcInstallation: 'OWASP-DepCheck-10' // Corrected syntax
+                        ''', odcInstallation: 'OWASP-DepCheck-10' 
+                        dependencyCheckPublisher failedTotalCritical: 1, pattern: 'dependency-check-report.xml', stopBuild: true //Fail Build if there is 1 Critical at xml report 
                     }
                 }
             }
