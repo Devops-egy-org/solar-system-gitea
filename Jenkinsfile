@@ -10,7 +10,7 @@ pipeline {
             steps {
                 sh 'npm install --no-audit'
             }
-        }
+          }
         stage('Dependency Scaning') {
             parallel {                  // It used to excute stages at same time Not depends on each other. 
                 stage('NPM Dependency Audit') {
@@ -39,5 +39,10 @@ pipeline {
                 }
             }
         }
+        stage('Unit Testing') {
+            steps {
+                sh 'npm test'
+            }
+        }        
     }
 }
