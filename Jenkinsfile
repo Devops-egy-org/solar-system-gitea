@@ -6,6 +6,7 @@ pipeline {
     }
     environment {
        MONGO_URI = "mongodb+srv://supercluster.d83jj.mongodb.net/superData"
+       MONGO_DB_CREDS = credentials('mango-db-credentils')
     }
 
 
@@ -47,21 +48,22 @@ pipeline {
         stage('Unit Testing') {
             options { retry(2) }
             steps {
-                withCredentials([usernamePassword(credentialsId: 'mango-db-credentils', passwordVariable: 'MONGO_PASSWORD', usernameVariable: 'MONGO_USERNAME')]) {
-                     sh 'npm test'
-                }
-                junit allowEmptyResults: true, keepProperties: true, stdioRetention: '', testResults: 'test-results.xml'
+              sh 'echo $mango-db-credentils' 
+              sh 'echo $mango-db-credentils_USR'
+              sh 'echo $mango-db-credentils_PSW'
+              sh 'npm test'
+              junit allowEmptyResults: true, keepProperties: true, stdioRetention: '', testResults: 'test-results.xml'
+                
             }
         }        
         stage('Code Coverage') {
            
             steps {
-                withCredentials([usernamePassword(credentialsId: 'mango-db-credentils', passwordVariable: 'MONGO_PASSWORD', usernameVariable: 'MONGO_USERNAME')]) {
                    catchError(buildResult: 'SUCCESS', message: 'Oosp! it will fixed in future relases', stageResult: 'UNSTABLE') { // catchError will let me continue to the next stage if these faild 
                        sh 'npm run coverage '
                    }
-                }
-                publishHTML([allowMissing: true, alwaysLinkToLastBuild: true, keepAll: true, reportDir: 'coverage/lcov-report', reportFiles: 'index.html', reportName: 'Code Coverage Html Report', reportTitles: '', useWrapperFileDirectly: true])
+                
+                   publishHTML([allowMissing: true, alwaysLinkToLastBuild: true, keepAll: true, reportDir: 'coverage/lcov-report', reportFiles: 'index.html', reportName: 'Code Coverage Html Report', reportTitles: '', useWrapperFileDirectly: true])
                
             }
         } 
