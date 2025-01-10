@@ -5,12 +5,13 @@ pipeline {
         nodejs 'nodejs-22-6-0' 
     }
     environment {
-        MONGO_URI = "mongodb+srv://supercluster.d83jj.mongodb.net/superData"
+   //     MONGO_URI = "mongodb+srv://supercluster.d83jj.mongodb.net/superData"
     }
 
 
     stages {
         stage('Installing Dependencies') {
+            options {timestamps}
             steps {
                 sh 'npm install --no-audit'
             }
@@ -44,6 +45,7 @@ pipeline {
             }
         }
         stage('Unit Testing') {
+            options { retry(2) }
             steps {
                 withCredentials([usernamePassword(credentialsId: 'mango-db-credentils', passwordVariable: 'MONGO_PASSWORD', usernameVariable: 'MONGO_USERNAME')]) {
                      sh 'npm test'
