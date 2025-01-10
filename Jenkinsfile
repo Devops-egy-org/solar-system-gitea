@@ -6,7 +6,7 @@ pipeline {
     }
     environment {
        MONGO_URI = "mongodb+srv://supercluster.d83jj.mongodb.net/superData"
-       MONGO_DB_CREDS = credentials('mango-db-credentils')
+       MONGO_DB_CREDS = credentials('mango_db_credentils')
     }
 
 
@@ -48,9 +48,9 @@ pipeline {
         stage('Unit Testing') {
             options { retry(2) }
             steps {
-              sh 'echo $mango-db-credentils' 
-              sh 'echo $mango-db-credentils_USR'
-              sh 'echo $mango-db-credentils_PSW'
+              sh 'echo $mango_db_credentils' 
+              sh 'echo $mango_db_credentils_USR'
+              sh 'echo $mango_db_credentils_PSW'
               sh 'npm test'
               junit allowEmptyResults: true, keepProperties: true, stdioRetention: '', testResults: 'test-results.xml'
                 
