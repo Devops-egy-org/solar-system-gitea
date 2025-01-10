@@ -53,5 +53,14 @@ pipeline {
                 junit allowEmptyResults: true, keepProperties: true, stdioRetention: '', testResults: 'test-results.xml'
             }
         }        
+        stage('Code Coverage') {
+           
+            steps {
+                withCredentials([usernamePassword(credentialsId: 'mango-db-credentils', passwordVariable: 'MONGO_PASSWORD', usernameVariable: 'MONGO_USERNAME')]) {
+                     sh 'npm run coverage'
+                }
+               
+            }
+        } 
     }
 }
