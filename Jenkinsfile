@@ -57,7 +57,9 @@ pipeline {
            
             steps {
                 withCredentials([usernamePassword(credentialsId: 'mango-db-credentils', passwordVariable: 'MONGO_PASSWORD', usernameVariable: 'MONGO_USERNAME')]) {
-                     sh 'npm run coverage || true'
+                   catchError(buildResult: 'SUCCESS', message: 'Oosp! it will fixed in future relases', stageResult: 'UNSTABLE') { // catchError will let me contine to the next stage if these faild 
+                       sh 'npm run coverage '
+                   }
                 }
                
             }
