@@ -48,9 +48,9 @@ pipeline {
         stage('Unit Testing') {
             options { retry(2) }
             steps {
-              sh 'echo $mango_db_credentils' 
-              sh 'echo $mango_db_credentils_USR'
-              sh 'echo $mango_db_credentils_PSW'
+              sh 'echo $MONGO_DB_CREDS' 
+              sh 'echo username - $MONGO_DB_CREDS_USR'
+              sh 'echo password - $MONGO_DB_CREDS_PSW'
               sh 'npm test'
               junit allowEmptyResults: true, keepProperties: true, stdioRetention: '', testResults: 'test-results.xml'
                 
