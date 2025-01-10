@@ -4,9 +4,9 @@ pipeline {
     tools {                         // Tools Section used to used specific Version from any tool Installed at Jenkins 
         nodejs 'nodejs-22-6-0' 
     }
-    environment {
+   // environment {
    //     MONGO_URI = "mongodb+srv://supercluster.d83jj.mongodb.net/superData"
-    }
+  //  }
 
 
     stages {
