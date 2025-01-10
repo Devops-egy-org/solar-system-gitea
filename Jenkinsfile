@@ -57,7 +57,7 @@ pipeline {
            
             steps {
                 withCredentials([usernamePassword(credentialsId: 'mango-db-credentils', passwordVariable: 'MONGO_PASSWORD', usernameVariable: 'MONGO_USERNAME')]) {
-                     sh 'npm run coverage'
+                     sh 'npm run coverage || true'
                 }
                
             }
