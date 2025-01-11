@@ -7,6 +7,8 @@ pipeline {
     environment {
        MONGO_URI = "mongodb+srv://supercluster.d83jj.mongodb.net/superData"
        MONGO_DB_CREDS = credentials('mango_db_credentils')
+       MONGO_USERNAME = credentials('mango_db_user')
+       MONGO_PASSWORD = credentials('mango_db_psw')
     }
 
 
