@@ -1,7 +1,7 @@
 pipeline {
     agent any
 
-    tools {                         // Tools Section used to used specific Version from any tool Installed at Jenkins 
+    tools {                         // Tools Section Used to used specific Version from any tool Installed at Jenkins 
         nodejs 'nodejs-22-6-0' 
     }
     environment {
