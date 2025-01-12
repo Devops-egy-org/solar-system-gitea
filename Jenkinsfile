@@ -70,12 +70,12 @@ pipeline {
                
             }
         }
-        stage ('SAST - SonaraQube') {
+        stage ('SAST-SonaraQube') {
             steps {
                 sh 'echo $SONAR_SCANNER_HOME'
                 sh '''
                    $SONAR_SCANNER_HOME \
-                       -Dsonar.sources=app.js
+                       -Dsonar.sources=app.js 
 
                 '''
 
