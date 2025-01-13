@@ -85,7 +85,7 @@ pipeline {
 
                     '''
                     }
-                    waitForQualityGate abortPipeline: true //Wait for SonarQube analysis to be completed and return quality gate status
+                    waitForQualityGate abortPipeline: true //Wait For SonarQube analysis to be completed and return quality gate status
                 }
 
             }
