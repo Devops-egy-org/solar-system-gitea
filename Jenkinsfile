@@ -38,6 +38,7 @@ pipeline {
                             --out ./
                             --format ALL
                             --prettyPrint
+                            --disableYarnAudit
                         ''', odcInstallation: 'OWASP-DepCheck-10' 
                         dependencyCheckPublisher failedTotalCritical: 1, pattern: 'dependency-check-report.xml', stopBuild: true //Fail Build if there is 1 Critical at xml report 
 
@@ -72,15 +73,18 @@ pipeline {
         }
         stage ('SAST-SonaraQube') {
             steps {
-                withSonarQubeEnv('sonar-qube-server') {  //Using Sonarqube Installation and Token & Host Url Part of installtion 
-                sh 'echo $SONAR_SCANNER_HOME'
-                sh '''
-                   $SONAR_SCANNER_HOME/bin/sonar-scanner \
-                      -Dsonar.projectKey=solar-system-project \
-                      -Dsonar.sources=app.js \
-                      -Dsonar.Javascript.lcov.reportPathes=./coverage/lcov.info
+                timeout(time: 60, unit: 'SECONDS') { // The timeout block in Jenkins is used to set a maximum time limit for executing a specific step or block of code within a pipeline. If the block exceeds the specified timeout, Jenkins will abort the execution of that block.
+                    withSonarQubeEnv('sonar-qube-server') {  //Using Sonarqube Installation and Token & Host Url Part of installtion "Jenkins Settings"
+                    sh 'echo $SONAR_SCANNER_HOME'
+                    sh '''
+                    $SONAR_SCANNER_HOME/bin/sonar-scanner \
+                        -Dsonar.projectKey=solar-system-project \
+                        -Dsonar.sources=app.js \
+                        -Dsonar.Javascript.lcov.reportPathes=./coverage/lcov.info
 
-                '''
+                    '''
+                    }
+                    waitForQualityGate abortPipeline: true //Wait for SonarQube analysis to be completed and return quality gate status
                 }
 
             }
