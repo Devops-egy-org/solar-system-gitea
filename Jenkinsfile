@@ -78,7 +78,7 @@ pipeline {
                       -Dsonar.projectKey=solar-system-project \
                       -Dsonar.sources=app.js \
                       -Dsonar.host.url=http://localhost:9000 \
-                      -Dsonar.token=sqp_3e8fff6c009932fbc569b8ae7277774d5017317b
+                      -Dsonar.token=sqp_719c7a9bcf92a4169ac65e4a21aff23385b28ff1
 
                 '''
 
