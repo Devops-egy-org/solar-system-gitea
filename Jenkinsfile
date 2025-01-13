@@ -107,6 +107,3 @@ pipeline {
 }
 
 
-
-
-//solar-system-project": sqp_3e8fff6c009932fbc569b8ae7277774d5017317b
