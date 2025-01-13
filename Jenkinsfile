@@ -64,14 +64,14 @@ pipeline {
            
             steps {
                    catchError(buildResult: 'SUCCESS', message: 'Oosp! it will fixed in future relases', stageResult: 'UNSTABLE') { // catchError will let me continue to the next stage if these faild 
-                       sh 'npm run coverage '
+                       sh 'npm run coverage ' //checking dependencies installed in  project
                    }
                 
                    publishHTML([allowMissing: true, alwaysLinkToLastBuild: true, keepAll: true, reportDir: 'coverage/lcov-report', reportFiles: 'index.html', reportName: 'Code Coverage Html Report', reportTitles: '', useWrapperFileDirectly: true])
                
             }
         }
-        stage ('SAST-SonaraQube') {
+        stage ('SAST-SonaraQube') { //SonarQube focuses on code quality and security analysis.
             steps {
                 timeout(time: 60, unit: 'SECONDS') { // The timeout block in Jenkins is used to set a maximum time limit for executing a specific step or block of code within a pipeline. If the block exceeds the specified timeout, Jenkins will abort the execution of that block.
                     withSonarQubeEnv('sonar-qube-server') {  //Using Sonarqube Installation and Token & Host Url Part of installtion "Jenkins Settings"
