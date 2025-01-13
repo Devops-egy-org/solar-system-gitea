@@ -72,7 +72,7 @@ pipeline {
         }
         stage ('SAST-SonaraQube') {
             steps {
-                withSonarQubeEnv('sonar-qube-token') {  //Using Sonarqube Installation and Token & Host Url Part of installtion 
+                withSonarQubeEnv('sonar-qube-server') {  //Using Sonarqube Installation and Token & Host Url Part of installtion 
                 sh 'echo $SONAR_SCANNER_HOME'
                 sh '''
                    $SONAR_SCANNER_HOME/bin/sonar-scanner \
