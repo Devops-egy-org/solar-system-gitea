@@ -74,8 +74,11 @@ pipeline {
             steps {
                 sh 'echo $SONAR_SCANNER_HOME'
                 sh '''
-                   $SONAR_SCANNER_HOME \
-                       -Dsonar.sources=app.js 
+                   $SONAR_SCANNER_HOME/bin/sonar-scanner \
+                      -Dsonar.projectKey=solar-system-project \
+                      -Dsonar.sources=app.js \
+                      -Dsonar.host.url=http://localhost:9000 \
+                      -Dsonar.token=sqp_3e8fff6c009932fbc569b8ae7277774d5017317b
 
                 '''
 
@@ -96,3 +99,8 @@ pipeline {
         }
     }
 }
+
+
+
+
+//solar-system-project": sqp_3e8fff6c009932fbc569b8ae7277774d5017317b
