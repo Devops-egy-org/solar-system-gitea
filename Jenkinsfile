@@ -72,15 +72,16 @@ pipeline {
         }
         stage ('SAST-SonaraQube') {
             steps {
+                withSonarQubeEnv('sonar-qube-token') {  //Using Sonarqube Installation and Token & Host Url Part of installtion 
                 sh 'echo $SONAR_SCANNER_HOME'
                 sh '''
                    $SONAR_SCANNER_HOME/bin/sonar-scanner \
                       -Dsonar.projectKey=solar-system-project \
                       -Dsonar.sources=app.js \
-                      -Dsonar.host.url=http://localhost:9000 \
-                      -Dsonar.token=sqp_719c7a9bcf92a4169ac65e4a21aff23385b28ff1
+                      -Dsonar.Javascript.lcov.reportPathes=./coverage/lcov.info
 
                 '''
+                }
 
             }
         }
