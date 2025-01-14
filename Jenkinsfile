@@ -117,19 +117,19 @@ pipeline {
                 always {
                     sh '''
                        trivy convert \
-                             --format template --template "@/user/share/trivy/templates/html.tpl" \
+                             --format template --template "@/usr/local/share/trivy/templates/html.tpl" \
                              --output trivy-image-MEDIUM-results.html trivy-image-MEDIUM-results.json
 
                        trivy convert \
-                             --format template --template "@/user/share/trivy/templates/html.tpl" \
+                             --format template --template "@/usr/local/share/trivy/templates/html.tpl" \
                              --output trivy-image-CRITICAL-results.html trivy-image-CRITICAL-results.json 
 
                         trivy convert \
-                            --format template --template "@/user/share/trivy/templates/junit.tpl" \
+                            --format template --template "@/usr/local/share/trivy/templates/junit.tpl" \
                             --output trivy-image-MEDIUM-results.xml trivy-image-MEDIUM-results.json 
                       
                         trivy convert \
-                             --format template --template "@/user/share/trivy/templates/junit.tpl" \
+                             --format template --template "@/usr/local/share/trivy/templates/junit.tpl" \
                              --output trivy-image-CRITICAL-results.xml trivy-image-CRITICAL-results.json 
 
                         
