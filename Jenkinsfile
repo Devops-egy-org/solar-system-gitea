@@ -139,6 +139,13 @@ pipeline {
                 }
             }
         }
+        stage ('Push Docker Image') { //Push Docker Image to Docker Registry
+            steps {
+                withDockerRegistry(credentialsId: 'docker-hub-credentials', url: "") {
+                sh 'docker push muhamedk/solar-system:$GIT_COMMIT'
+                }
+            }
+        }
     }
 
     post {
