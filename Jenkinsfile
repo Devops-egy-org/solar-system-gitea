@@ -96,11 +96,11 @@ pipeline {
                 sh 'docker build -t muhamedk/solar-system:$GIT_COMMIT .'
             }
         }
-        stage ('Trivy Vulnerability Scanner') { //scanning docker image Using Trivy 
+        stage ('Trivy Vulnerability Scanner') { //Scanning docker image Using Trivy 
             steps {
                 sh '''
                    trivy image muhamedk/solar-system:$GIT_COMMIT \
-                        --severity LOW,MEDIUM \
+                        --severity LOW,MEDIUM,HIGH \
                         --exit-code 0 \
                         --quiet \
                         --format json -o trivy-image-MEDIUM-results.json 
