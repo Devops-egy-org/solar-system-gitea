@@ -107,7 +107,7 @@ pipeline {
                         
 
                     trivy image muhamedk/solar-system:$GIT_COMMIT \
-                        --severity HIGH,CRITICAL\
+                        --severity CRITICAL\
                         --exit-code 1 \
                         --quiet \
                         --format json -o trivy-image-CRITICAL-results.json
