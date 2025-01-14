@@ -96,16 +96,75 @@ pipeline {
                 sh 'docker build -t muhamedk/solar-system:$GIT_COMMIT .'
             }
         }
+        stage ('Trivy Vulnerability Scanner') { //scanning docker image Using Trivy 
+            steps {
+                sh '''
+                   trivy image muhamedk/solar-system:$GIT_COMMIT \
+                        --severity LOW,MEDIUM \
+                        --exit-code 0 \
+                        --quiet \
+                        --format json -o trivy-image-MEDIUM-results.json 
+                        
+
+                    trivy image muhamedk/solar-system:$GIT_COMMIT \
+                        --severity HIGH,CRITICAL\
+                        --exit-code 1 \
+                        --quiet \
+                        --format json -o trivy-image-CRITICAL-results.json
+                ''' //Trivy didn't support Reports at Html or xml but you can generate the JSON report first and convert it to other formats with the convert subcommand.you can go to Docs For more.
+            }
+            post {
+                always {
+                    sh '''
+                       trivy convert \
+                             --format template --template "@/user/share/trivy/templates/html.tpl" \
+                             --output trivy-image-MEDIUM-results.html trivy-image-MEDIUM-results.json
+
+                       trivy convert \
+                             --format template --template "@/user/share/trivy/templates/html.tpl" \
+                             --output trivy-image-CRITICAL-results.html trivy-image-CRITICAL-results.json 
+
+                        trivy convert \
+                            --format template --template "@/user/share/trivy/templates/junit.tpl" \
+                            --output trivy-image-MEDIUM-results.xml trivy-image-MEDIUM-results.json 
+                      
+                        trivy convert \
+                             --format template --template "@/user/share/trivy/templates/junit.tpl" \
+                             --output trivy-image-CRITICAL-results.xml trivy-image-CRITICAL-results.json 
+
+                        
+                    '''
+
+
+                }
+            }
+        }
     }
 
     post {
-        always {
-            junit allowEmptyResults: true, keepProperties: true, stdioRetention: '', testResults: 'dependency-check-junit.xml' // Puplish dependency-check-junit.xml to Junkins Test Result
+        always { 
+            //Puplish junit.xml to Junkins Test Result
+            junit allowEmptyResults: true, keepProperties: true, stdioRetention: '', testResults: 'dependency-check-junit.xml' // 
+
             junit allowEmptyResults: true, keepProperties: true, stdioRetention: '', testResults: 'test-results.xml'
 
+            junit allowEmptyResults: true, keepProperties: true, stdioRetention: '', testResults: 'trivy-image-MEDIUM-results.xml'
+
+            junit allowEmptyResults: true, keepProperties: true, stdioRetention: '', testResults: 'trivy-image-CRITICAL-results.xml'
+
+
+
+
+            //Puplish Html to Junkins Artifactes 
+            publishHTML([allowMissing: true, alwaysLinkToLastBuild: true, keepAll: true, reportDir: './', reportFiles: 'trivy-image-MEDIUM-results.html', reportName: 'trivy-image-MEDIUM-results Html Report', reportTitles: '', useWrapperFileDirectly: true])
+
+            publishHTML([allowMissing: true, alwaysLinkToLastBuild: true, keepAll: true, reportDir: './', reportFiles: 'trivy-image-CRITICAL-results.html', reportName: 'trivy-image-CRITICAL-results Html Report', reportTitles: '', useWrapperFileDirectly: true])
+             
             publishHTML([allowMissing: true, alwaysLinkToLastBuild: true, keepAll: true, reportDir: './', reportFiles: 'dependency-check-jenkins.html', reportName: 'Dependency check Html Report', reportTitles: '', useWrapperFileDirectly: true]) // Adding dependency-check-jenkins.html at Artifacts
 
             publishHTML([allowMissing: true, alwaysLinkToLastBuild: true, keepAll: true, reportDir: 'coverage/lcov-report', reportFiles: 'index.html', reportName: 'Code Coverage Html Report', reportTitles: '', useWrapperFileDirectly: true])
+
+
 
 
         }
