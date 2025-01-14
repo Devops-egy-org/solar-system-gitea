@@ -64,7 +64,7 @@ pipeline {
            
             steps {
                    catchError(buildResult: 'SUCCESS', message: 'Oosp! it will fixed in future relases', stageResult: 'UNSTABLE') { // catchError will let me continue to the next stage if these faild 
-                       sh 'npm run coverage ' //checking dependencies installed in  project
+                       sh 'npm run coverage ' //checking dependencies installed in  project and using catchError to prevent pip;e;ome to fail at minor error
                    }
                 
                    publishHTML([allowMissing: true, alwaysLinkToLastBuild: true, keepAll: true, reportDir: 'coverage/lcov-report', reportFiles: 'index.html', reportName: 'Code Coverage Html Report', reportTitles: '', useWrapperFileDirectly: true])
@@ -88,6 +88,12 @@ pipeline {
                     waitForQualityGate abortPipeline: true //Wait For SonarQube analysis to be completed and return quality gate status
                 }
 
+            }
+        }
+        stage ('Build Docker Image') {
+            steps {
+                sh 'printenv'
+                sh 'docker build -t muhamedk/solar-system:$GIT_COMMIT .'
             }
         }
     }
