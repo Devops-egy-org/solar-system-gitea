@@ -146,7 +146,7 @@ pipeline {
                 }
             }
         }
-        stage ('Deploy - AWS EC2') { //Deploy Docakerization app via ssh Agent Plugin 
+        stage ('Deploy - AWS EC2') { //Deploy dockerization app via ssh Agent Plugin 
             when { //this is condection to run this stage at spific branch 
                 branch 'feature/*'
             }
@@ -160,7 +160,7 @@ pipeline {
                                 sudo docker stop solar-system && sudo docker rm solar-system
                                 echo "Container stopped and removed."
                             fi
-                                sudo docker runm --name solar-system \
+                                sudo docker run --name solar-system \
                                     -e MONGO_URI=$MONGO_URI \
                                     -e MONGO_USERNAME=$MONGO_USERNAME
                                     -e MONGO_PASSWORD=$MONGO_PASSWORD
