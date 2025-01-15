@@ -146,6 +146,29 @@ pipeline {
                 }
             }
         }
+        satge ('Deploy - AWS EC2') { //Deploy Docakerization app via ssh Agent Plugin 
+            steps { 
+                sshagent(['aws-dev-deploy-ec2-instance']) {
+                    sh '''
+                      ssh -o StrictHostKeyChecking=no ec2-user@52.15.142.123 << EOF
+                        if sudo docker ps -a | grep -q "solar-system"; then
+                            echo "Container found. Stopping and removing..."
+                            sudo docker stop solar-system && sudo docker rm solar-system
+                            echo "Container stopped and removed."
+                        fi
+                            sudo docker runm --name solar-system \
+                                -e MONGO_URI=$MONGO_URI \
+                                -e MONGO_USERNAME=$MONGO_USERNAME
+                                -e MONGO_PASSWORD=$MONGO_PASSWORD
+                                -p 3000:3000 -d muhamedk/solar-system:$GIT_COMMIT
+                      EOF
+                    '''
+
+
+                }
+
+            }
+        }
     }
 
     post {
