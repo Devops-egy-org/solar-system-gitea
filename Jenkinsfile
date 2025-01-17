@@ -19,7 +19,7 @@ pipeline {
             steps {
                 sh 'npm install --no-audit'
             }
-          }
+        }
         stage('Dependency Scaning') {
             parallel {                  // It used to excute stages at same time Not depends on each other. 
                 stage('NPM Dependency Audit') {
@@ -154,7 +154,7 @@ pipeline {
               script{ // I used script block becouse Crovy did't understand if condectios and for loop
                     sshagent(['aws-dev-deploy-ec2-instance']) {
                         sh '''
-                            ssh -o StrictHostKeyChecking=no ec2-user@52.15.142.123 "
+                            ssh -o StrictHostKeyChecking=no ec2-user@18.227.105.220 "
                                 if sudo docker ps -a | grep -q "solar-system"; then
                                     echo "Container found. Stopping and removing..."
                                     sudo docker stop solar-system && sudo docker rm solar-system
@@ -167,11 +167,23 @@ pipeline {
                                         -p 3000:3000 -d muhamedk/solar-system:$GIT_COMMIT
                             "
                         '''
-
-
                     }
                 }    
 
+            }
+        }
+        stage ('Integration Testing AWS-EC2') {
+            when { //this is condection to run this stage at spific branch 
+                branch 'feature/*'
+            }
+            steps {
+                sh 'printenv | grep -i branch'
+                withAWS(Credentials: 'aws-s3-ec2-lambda-cerds', region: 'us-east-2') {
+                    sh '''
+                       bash integration-testing.sh
+                    '''
+
+                }
             }
         }
     }
