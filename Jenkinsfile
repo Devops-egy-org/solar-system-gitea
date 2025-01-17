@@ -111,7 +111,7 @@ pipeline {
                         --exit-code 0 \
                         --quiet \
                         --format json -o trivy-image-CRITICAL-results.json
-                ''' //Trivy didn't support Reports at Html or xml but you can generate the JSON report first and convert it to other formats with the convert subcommand.you can go to Docs For more.
+                ''' //Trivy didn't support Reports at Html or xml but you can generate the JSON report first and convert it to other formats with the convert subcommand.you can go to Docs For more. "For Testng i changed severity CRITICAL to 0"
             }
             post {
                 always {

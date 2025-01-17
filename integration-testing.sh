@@ -9,7 +9,7 @@ Data=$(aws ec2 describe-instances)
 echo "Data = $Data"
 
 # Extract URL or IP of an EC2 instance with the tag "dev-deploy"
-URL=$(aws ec2 describe-instances | jq -r '.Reservations[].Instances[] | select(.Tags[].Value == "dev-deploy") | .PublicIpAddress')
+URL=$(aws ec2 describe-instances | jq -r '.Reservations[].Instances[] | select(.Tags[].Value == "app-dev") | .PublicIpAddress')
 echo "URL Data - $URL"
 
 # Check if URL was retrieved
