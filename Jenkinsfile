@@ -178,7 +178,7 @@ pipeline {
             }
             steps {
                 sh 'printenv | grep -i branch'
-                withAWS(Credentials: 'aws-s3-ec2-lambda-cerds', region: 'us-east-2') {
+                withAWS(credentials: 'aws-s3-ec2-lambda-cerds', region: 'us-east-2') {
                     sh '''
                        bash integration-testing.sh
                     '''
