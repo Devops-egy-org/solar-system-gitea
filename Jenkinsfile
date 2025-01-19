@@ -203,7 +203,7 @@ pipeline {
                        cat deployment.yml
 
                        #### Commit and Push to Feature Branch ####
-                       git config --global user,email "Jenkins@solar.com"
+                       git config --global user.email "jenkins@solar.com"
                        gti remote set-url origine https://$GITHUB-TOKEN@github.com/Devops-egy-org/solar-system-gitops-argocd
                        git add .
                        git commit -am "Update Docker Image"
