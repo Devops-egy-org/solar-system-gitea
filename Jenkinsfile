@@ -196,7 +196,7 @@ pipeline {
                 sh 'git clone -b main https://github.com/Devops-egy-org/solar-system-gitops-argocd'
                 dir("solar-system-gitops-argocd/kubernetes") { //cahange the current dir
                     sh '''
-                       #### Replace Docker Tage #####
+                       ##### Replace Docker Tage ######
                        git checkout main 
                        git checkout -d feature-$BUILD_ID
                        sed -i "s#muhamedk.*#muhamedk/solar-system:$GIT_COMMIT#g" deployment.yaml
