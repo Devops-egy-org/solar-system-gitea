@@ -9,7 +9,9 @@ pipeline {
        MONGO_DB_CREDS = credentials('mango_db_credentils')
        MONGO_USERNAME = credentials('mango_db_user')
        MONGO_PASSWORD = credentials('mango_db_psw')
+       GITHUB-TOKEN =  credentials('Github-Token')
        SONAR_SCANNER_HOME = tool 'sonarqube-scanner-610'
+
     }
 
 
@@ -186,10 +188,42 @@ pipeline {
                 }
             }
         }
+        stage ('K8S Updte Image Tag') {
+            when {
+                branch 'PR*'
+            }
+            steps {
+                sh 'git clone -b main https://github.com/Devops-egy-org/solar-system-gitops-argocd'
+                dir("solar-system-gitops-argocd/kubernetes") { //cahange the current dir
+                    sh '''
+                       #### Replace Docker Tage #####
+                       git checkout main 
+                       git checkout -d feature-$BUILD_ID
+                       sed -i "s#muhamedk.*#muhamedk/solar-system:$GIT_COMMIT#g" deployment.yaml
+                       cat deployment.yaml
+
+                       #### Commit and Push to Feature Branch ####
+                       git config --global user,email "Jenkins@solar.com"
+                       gti remote set-url origine https://$GITHUB-TOKEN@github.com/Devops-egy-org/solar-system-gitops-argocd
+                       git add .
+                       git commit -am "Update Docker Image"
+                       git push -u origin feature-$BUILD_ID
+   
+                     ''' 
+                    
+                }
+            }
+
+        }
     }
 
     post {
         always { 
+            script {
+                if (fileExists('solar-system-gitops-argocd')) {
+                    sh 'rm -rf solar-system-gitops-argocd'
+                }
+            }
             //Puplish junit.xml to Junkins Test Result
             junit allowEmptyResults: true, keepProperties: true, stdioRetention: '', testResults: 'dependency-check-junit.xml' // 
 
