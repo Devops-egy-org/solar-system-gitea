@@ -200,7 +200,7 @@ pipeline {
                        git checkout main 
                        git checkout -b feature-$BUILD_ID
                        sed -i "s#muhamedk.*#muhamedk/solar-system:$GIT_COMMIT#g" deployment.yml
-                       cat deployment.yaml
+                       cat deployment.yml
 
                        #### Commit and Push to Feature Branch ####
                        git config --global user,email "Jenkins@solar.com"
