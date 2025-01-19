@@ -198,7 +198,7 @@ pipeline {
                     sh '''
                        #### Replace Docker Tage #####
                        git checkout main 
-                       git checkout -d feature-$GIT_COMMIT
+                       git checkout -b feature-$BUILD_ID
                        sed -i "s#muhamedk.*#muhamedk/solar-system:$GIT_COMMIT#g" deployment.yaml
                        cat deployment.yaml
 
