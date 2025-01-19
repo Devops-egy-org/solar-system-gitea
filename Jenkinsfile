@@ -207,7 +207,7 @@ pipeline {
                        git remote set-url origine https://$GITHUB_TOKEN@github.com/Devops-egy-org/solar-system-gitops-argocd
                        git add .
                        git commit -am "Update Docker Image"
-                       git push -u origin feature-$BUILD_ID
+                       git push 
    
                      ''' 
                     
