@@ -204,7 +204,7 @@ pipeline {
 
                        #### Commit and Push to Feature Branch ####
                        git config --global user.email "jenkins@solar.com"
-                       git remote set-url origine https://$GITHUB_TOKEN@github.com/Devops-egy-org/solar-system-gitops-argocd
+                       git remote set-url https://$GITHUB_TOKEN@github.com/Devops-egy-org/solar-system-gitops-argocd
                        git add .
                        git commit -am "Update Docker Image"
                        git push 
