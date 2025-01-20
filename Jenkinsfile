@@ -10,6 +10,8 @@ pipeline {
        MONGO_USERNAME = credentials('mango_db_user')
        MONGO_PASSWORD = credentials('mango_db_psw')
        GITHUB_TOKEN = credentials('github_token')
+       K8S_TOKEN = credentials('k8s-token')
+       K8S_SERVER = 'https://192.168.56.30:6443'
        SONAR_SCANNER_HOME = tool 'sonarqube-scanner-610'
 
     }
@@ -214,6 +216,25 @@ pipeline {
                 }
             }
 
+        }
+        stage ('K8S - Rise PR') {
+            when {
+                branch 'PR*'
+            }
+            steps {
+                  sh '''
+                     curl -L \
+                        -X POST \
+                        -H "Accept: application/vnd.github+json" \
+                        -H "Authorization: Bearer $GITHUB_TOKEN" \
+                        -H "X-GitHub-Api-Version: 2022-11-28" \
+                        https://api.github.com/repos/Devops-egy-org/solar-system-gitops-argocd/pulls \
+                        -d '{"title":"Update Docker Image","body":"Update docker image in deploymet mainfest!","head":"feature-$BUILD_ID","base":"main"}'
+                  '''
+
+                }
+
+            }
         }
     }
 
