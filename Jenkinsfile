@@ -196,8 +196,9 @@ pipeline {
             }
             steps {
                 script {
-                if (fileExists('solar-system-gitops-argocd')) {
-                    sh 'rm -rf solar-system-gitops-argocd'
+                     if (fileExists('solar-system-gitops-argocd')) {
+                     sh 'rm -rf solar-system-gitops-argocd'
+                    }
                 }
                 sh 'git clone -b main https://github.com/Devops-egy-org/solar-system-gitops-argocd'
                 dir("solar-system-gitops-argocd/kubernetes") { //cahange the current dir
@@ -280,6 +281,3 @@ pipeline {
 
         }
     }
-
-
-
