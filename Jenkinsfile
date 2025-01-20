@@ -245,7 +245,7 @@ pipeline {
                 }
 
         }
-        stage ('APP Deployed?') {//Make Sure Merging happen to main branch befor run web Interface 
+        stage ('APP Deployed?') {//Make Sure Merging happen to Mainfast K8s main branch befor run web Interface this stage will Wait for interactive input For 1 Day after that it will fail! 
             when {
                 branch 'PR*'
             }
@@ -268,11 +268,14 @@ pipeline {
                     -w zap_report.md \
                     -J zap_json_report.json \
                     -x zap_xml_report.xml
+                    -c zap_ignore_rules
                 ''' 
            }
            
 
         }
+
+
         }  
     }
 
@@ -302,7 +305,12 @@ pipeline {
              
             publishHTML([allowMissing: true, alwaysLinkToLastBuild: true, keepAll: true, reportDir: './', reportFiles: 'dependency-check-jenkins.html', reportName: 'Dependency check Html Report', reportTitles: '', useWrapperFileDirectly: true]) // Adding dependency-check-jenkins.html at Artifacts
 
+            publishHTML([allowMissing: true, alwaysLinkToLastBuild: true, keepAll: true, reportDir: './', reportFiles: 'zap_report.html', reportName: 'DAST - OWASP ZAP Report', reportTitles: '', useWrapperFileDirectly: true])
+
+
             publishHTML([allowMissing: true, alwaysLinkToLastBuild: true, keepAll: true, reportDir: 'coverage/lcov-report', reportFiles: 'index.html', reportName: 'Code Coverage Html Report', reportTitles: '', useWrapperFileDirectly: true])
+
+            
 
 
 
