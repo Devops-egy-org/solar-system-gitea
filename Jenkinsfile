@@ -223,14 +223,19 @@ pipeline {
             }
             steps {
                   sh '''
-                     curl -L \
+                    curl -L \
                         -X POST \
                         -H "Accept: application/vnd.github+json" \
                         -H "Authorization: Bearer $GITHUB_TOKEN" \
                         -H "X-GitHub-Api-Version: 2022-11-28" \
                         https://api.github.com/repos/Devops-egy-org/solar-system-gitops-argocd/pulls \
-                        -d '{"title":"Update Docker Image","body":"Update docker image in deploymet mainfest!","head":"feature-$BUILD_ID","base":"main"}'
-                  '''
+                        -d \'{
+                            "title": "Update Docker Image",
+                            "body": "Update docker image in deployment manifest!",
+                            "head": "feature-'${BUILD_ID}'",
+                            "base": "main"
+                        }\'
+                    '''
 
                 }
 
