@@ -195,11 +195,6 @@ pipeline {
                 branch 'PR*'
             }
             steps {
-                script {
-                     if (fileExists('solar-system-gitops-argocd')) {
-                     sh 'rm -rf solar-system-gitops-argocd'
-                    }
-                }
                 sh 'git clone -b main https://github.com/Devops-egy-org/solar-system-gitops-argocd'
                 dir("solar-system-gitops-argocd/kubernetes") { //cahange the current dir
                     sh '''
@@ -287,7 +282,7 @@ pipeline {
                     cp dependency*.* test-results.xml trivy*.* reports-$BUILD_ID/
                     ls -ltr reports-$BUILD_ID/
                     '''
-                    s3Upload(
+                    s3Upload( //Using AWS Steps Plugin 
                         file:"reports-$BUILD_ID", 
                         bucket:"solar-system-jenkins-reports-bucket-s3", 
                         path:"jenkins-$BUILD_ID/")
