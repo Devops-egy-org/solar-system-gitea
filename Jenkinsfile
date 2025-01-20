@@ -267,25 +267,33 @@ pipeline {
                     -r zap_report.html \
                     -w zap_report.md \
                     -J zap_json_report.json \
-                    -x zap_xml_report.xml
+                    -x zap_xml_report.xml \
                     -c zap_ignore_rules
                 ''' 
            }
            
 
         }
-        // stage ('Upload - AWS S3') {
-        //     when {
-        //         branch 'PR*'
-        //     }
-        //     steps {
-        //         sh '''
-        //            ls -ltr 
-        //            mkdir reports-$BUILD_ID
-        //            cp -rf 
-        //         '''
-        //     }
-        // }
+        stage ('Upload - AWS S3') {
+            when {
+                branch 'PR*'
+            }
+            steps {
+                withAWS(credentials: 'aws-s3-ec2-lambda-cerds', region: 'us-east-2') {
+                    sh '''
+                    ls -ltr 
+                    mkdir reports-$BUILD_ID
+                    cp -rf coverage/ reports-$BUILD_ID/
+                    cp dependency*.* test-results.xml trivy*.* reports-$BUILD_ID/
+                    ls -ltr reports-$BUILD_ID/
+                    '''
+                    s3Upload(
+                        file:"reports-$BUILD_ID", 
+                        bucket:"solar-system-jenkins-reports-bucket-s3", 
+                        path:"jenkins-$BUILD_ID/")
+                }
+            }
+        }
 
 
         }  
