@@ -269,7 +269,7 @@ pipeline {
            
 
         }
-        stage ('Upload - AWS S3') {
+        stage ('Upload - AWS S3') { //Uploade Reports To S3 Bucket
             when {
                 branch 'PR*'
             }
@@ -286,6 +286,16 @@ pipeline {
                         file:"reports-$BUILD_ID", 
                         bucket:"solar-system-jenkins-reports-bucket-s3", 
                         path:"jenkins-$BUILD_ID/")
+                }
+            }
+        }
+        stage ('Deploy to Prod?') {
+            when {
+                branch 'main'
+            }
+            steps {
+                timeout(time: 1, unit: 'DAYS') {
+                    input message: 'Deploy to Production?', ok: 'Yes! Let us try this on production', submitter: 'admin' 
                 }
             }
         }
