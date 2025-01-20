@@ -75,7 +75,7 @@ pipeline {
                
             }
         }
-        stage ('SAST-SonaraQube') { //SonarQube focuses on code quality and security analysis.
+        stage ('SAST-SonaraQube') { //SonarQube focuses on Source code quality and security analysis.
             steps {
                 timeout(time: 60, unit: 'SECONDS') { // The timeout block in Jenkins is used to set a maximum time limit for executing a specific step or block of code within a pipeline. If the block exceeds the specified timeout, Jenkins will abort the execution of that block.
                     withSonarQubeEnv('sonar-qube-server') {  //Using Sonarqube Installation and Token & Host Url Part of installtion "Jenkins Settings"
@@ -222,7 +222,7 @@ pipeline {
             }
 
         }
-        stage ('K8S - Rise PR') {
+        stage ('K8S - Rise PR') {//Rais a PR after change the Image Tage 
             when {
                 branch 'PR*'
             }
@@ -244,8 +244,36 @@ pipeline {
 
                 }
 
+        }
+        stage ('APP Deployed?') {//Make Sure Merging happen to main branch befor run web Interface 
+            when {
+                branch 'PR*'
+            }
+            steps {
+                timeout(time: 1, unit: 'DAYS') {
+                    input message: 'is the PR Merges and ArgoCD Synced?', ok: 'Yes! PR is Merged and ArgoCD Application is Synced'
+                }
             }
         }
+        stage ('DAST - OWASP ZAP') { //DAST'Dynamic Application Security Testing' Tools like "ZED Attack Proxy" Scan the app web interfaces and API insted of scorce code to detect common vulnerabilities Like SQL injection, Cross-Site Scripting and many 
+           when {
+            branch 'PR*'
+           }
+           steps {
+                sh '''
+                    chmod 777 $(pwd)
+                    docker run -v $(pwd):/zap/wrk/:rw ghcr.io/zaproxy/zaproxy zap-api-scan.py \
+                    -t http://192.168.56.21:30000/api-docs/ -f openapi \
+                    -r zap_report.html \
+                    -w zap_report.md \
+                    -J zap_json_report.json \
+                    -x zap_xml_report.xml
+                ''' 
+           }
+           
+
+        }
+        }  
     }
 
     post {
