@@ -274,18 +274,18 @@ pipeline {
            
 
         }
-        //stage ('Upload - AWS S3') {
-            when {
-                branch 'PR*'
-            }
-            steps {
-                sh '''
-                   ls -ltr 
-                   mkdir reports-$BUILD_ID
-                   cp -rf 
-                '''
-            }
-       // }
+        // stage ('Upload - AWS S3') {
+        //     when {
+        //         branch 'PR*'
+        //     }
+        //     steps {
+        //         sh '''
+        //            ls -ltr 
+        //            mkdir reports-$BUILD_ID
+        //            cp -rf 
+        //         '''
+        //     }
+        // }
 
 
         }  
