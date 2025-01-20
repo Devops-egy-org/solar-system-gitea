@@ -255,7 +255,7 @@ pipeline {
                 }
             }
         }
-        stage ('DAST - OWASP ZAP') { //DAST'Dynamic Application Security Testing' Tools like "ZED Attack Proxy" Scan the app web interfaces and API insted of scorce code to detect common vulnerabilities Like SQL injection, Cross-Site Scripting and many 
+        stage ('DAST - OWASP ZAP ') { //DAST'Dynamic Application Security Testing' Tools like "ZED Attack Proxy" Scan the app web interfaces and API insted of scorce code to detect common vulnerabilities Like SQL injection, Cross-Site Scripting and many 
            when {
             branch 'PR*'
            }
