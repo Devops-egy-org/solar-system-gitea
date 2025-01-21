@@ -95,6 +95,7 @@ pipeline {
             }
         }
         stage ('Build Docker Image') {
+            
             steps {
                 sh 'printenv'
                 sh 'docker build -t muhamedk/solar-system:$GIT_COMMIT .'
@@ -327,7 +328,18 @@ pipeline {
                 '''
                 sh '''
                    aws s3 cp solar-system-lambda-$BUILD_ID.zip s3://solar-system-lambda-bucket-s3/solar-system-lambda-$BUILD_ID.zip
-                   
+                '''
+                sh '''
+                   aws lambda update-function-configuration \
+                    --function-name solar-system-function \
+                    --environment "Variables={
+                    MONGO_USERNAME=$MONGO_USERNAME,
+                    MONGO_PASSWORD=$MONGO_PASSWORD,
+                    MONGO_URI=$MONGO_URI
+                    }"
+                '''
+
+                sh '''
                    aws lambda update-function-code \
                    --function-name solar-system-function \
                    --s3-bucket solar-system-lambda-bucket-s3 \
