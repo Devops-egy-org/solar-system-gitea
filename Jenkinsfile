@@ -303,6 +303,39 @@ pipeline {
                 }
             }
         }
+        stage ('Lambda - S3 Upload & Deploy') {
+            when { 
+               branch 'main'
+            }
+            steps {
+               withAWS(credentials: 'aws-s3-ec2-lambda-cerds', region: 'us-east-2') {
+                sh '''
+                   tail -5 app.js
+                   echo "**************************************************"
+                   sed -i "/^app.listen(3000/ s/^/\/\//" app.js
+                   sed -i "/^module.exports = app/ s/^/\/\//" app.js 
+                   sed -i "/^\/\/module.exports.handler = serverless(app)/ s/\/\/module.exports.handler = serverless(app)/module.exports.handler = serverless(app)/" app.js
+                   echo "***************************************************"
+                   tail -5 app.js 
+                '''
+                sh '''
+                   echo "*****Zip App******"
+                   zip -qr solar-system-lambda-$BUILD_ID.zip app* package* index.html node*
+                   ls -ltr solar-system-lambda-$BUILD_ID.zip
+                '''
+                sh '''
+                   aws s3 cp solar-system-lambda-$BUILD_ID.zip s3://solar-system-lambda-bucket-s3/solar-system-lambda-$BUILD_ID.zip
+                   
+                   aws lambda update-function-code \
+                   --function-name solar-system-function \
+                   --s3-bucket solar-system-lambda-bucket-s3 \
+                   --s3-key solar-system-lambda-$BUILD_ID.zip
+                
+                '''
+
+               }
+            }
+        }
         
 
 
