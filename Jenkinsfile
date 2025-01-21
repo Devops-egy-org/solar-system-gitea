@@ -291,7 +291,11 @@ pipeline {
         }
         stage ('Deploy to Prod?') {
             when {
-                branch 'main'
+                anyOf{
+                    branch 'main'
+                    branch 'PR*' 
+                }
+                
             }
             steps {
                 timeout(time: 1, unit: 'DAYS') {
@@ -299,6 +303,7 @@ pipeline {
                 }
             }
         }
+        
 
 
     }  
