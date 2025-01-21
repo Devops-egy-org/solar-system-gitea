@@ -75,7 +75,7 @@ pipeline {
                
             }
         }
-        stage ('SAST-SonaraQube') { //SonarQube focuses on Source code quality and security analysis.
+        stage ('SAST-SonaraQube ') { //SonarQube focuses on Source code quality and security analysis.
             steps {
                 timeout(time: 60, unit: 'SECONDS') { // The timeout block in Jenkins is used to set a maximum time limit for executing a specific step or block of code within a pipeline. If the block exceeds the specified timeout, Jenkins will abort the execution of that block.
                     withSonarQubeEnv('sonar-qube-server') {  //Using Sonarqube Installation and Token & Host Url Part of installtion "Jenkins Settings"
