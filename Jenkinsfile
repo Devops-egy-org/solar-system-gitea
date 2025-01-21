@@ -310,7 +310,7 @@ pipeline {
             steps {
                withAWS(credentials: 'aws-s3-ec2-lambda-cerds', region: 'us-east-2') {
                 script {
-                    sh '''
+                 sh '''
                     tail -5 app.js
                     echo "**************************************************"
                     sed -i "/^app.listen(3000/ s/^/\/\//" app.js
@@ -318,7 +318,7 @@ pipeline {
                     sed -i "/^\/\/module.exports.handler = serverless(app)/ s/\/\/module.exports.handler = serverless(app)/module.exports.handler = serverless(app)/" app.js
                     echo "***************************************************"
                     tail -5 app.js 
-                    '''
+                 '''
                 }
                 sh '''
                    echo "*****Zip App******"
