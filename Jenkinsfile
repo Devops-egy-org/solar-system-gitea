@@ -312,7 +312,7 @@ pipeline {
                 script {
                  sh '''
                     tail -5 app.js
-                    echo "**************************************************"
+                    echo "***************************************************"
                     sed -i "/^app\\.listen(3000/ s/^/\\/\\//" app.js
                     sed -i "/^module.exports = app/ s/^/\\/\\//" app.js 
                     sed -i "/^\\/\\/module.exports.handler = serverless(app)/ s/\\/\\/module.exports.handler = serverless(app)/module.exports.handler = serverless(app)/" app.js
