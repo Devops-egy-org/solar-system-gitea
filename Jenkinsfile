@@ -95,14 +95,20 @@ pipeline {
             }
         }
         stage ('Build Docker Image') {
-            
+            when {
+                    expression { env.BRANCH_NAME != 'main' }
+                }
             steps {
                 sh 'printenv'
                 sh 'docker build -t muhamedk/solar-system:$GIT_COMMIT .'
             }
         }
         stage ('Trivy Vulnerability Scanner') { //Scanning docker image Using Trivy 
+            when {
+                    expression { env.BRANCH_NAME != 'main' }
+                }
             steps {
+                
                 sh '''
                    trivy image muhamedk/solar-system:$GIT_COMMIT \
                         --severity LOW,MEDIUM,HIGH \
@@ -145,6 +151,9 @@ pipeline {
             }
         }
         stage ('Push Docker Image') { //Push Docker Image to Docker Registry
+            when {
+                    expression { env.BRANCH_NAME != 'main' }
+                }
             steps {
                 withDockerRegistry(credentialsId: 'docker-hub-credentials', url: "") {
                 sh 'docker push muhamedk/solar-system:$GIT_COMMIT'
@@ -291,13 +300,13 @@ pipeline {
             }
         }
         stage ('Deploy to Prod?') {
-            when {
-                anyOf{
-                    branch 'main'
-                    branch 'PR*' 
+                when {
+                    anyOf{
+                        branch 'main'
+                        branch 'PR*' 
+                    }
+                    
                 }
-                
-            }
             steps {
                 timeout(time: 1, unit: 'DAYS') {
                     input message: 'Deploy to Production?', ok: 'Yes! Let us try this on production', submitter: 'admin' 
