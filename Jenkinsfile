@@ -22,7 +22,12 @@ pipeline {
                   steps {
                     cleanWs()
                          }
-            }
+        }
+        stage('Checkout Code') {
+             steps {
+               checkout scm 
+                    }
+        }
 
         stage('Installing Dependencies') {
             options { timestamps() }
