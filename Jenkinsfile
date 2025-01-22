@@ -19,14 +19,14 @@ pipeline {
 
     stages {
         stage('Clean Workspace ') {
-                  steps {
-                    cleanWs()
-                         }
+             steps {
+                cleanWs()
+                   }
         }
         stage('Checkout Code') {
              steps {
                checkout scm 
-                    }
+                   }
         }
 
         stage('Installing Dependencies') {
